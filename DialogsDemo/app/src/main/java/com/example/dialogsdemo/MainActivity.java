@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -88,12 +89,52 @@ public class MainActivity extends AppCompatActivity {
             builder.setTitle("Exam Submit");
             builder.setIcon(R.drawable.ic_launcher_background);
 
-            builder.setPositiveButton("yes",new PositiveBtnClickListener());
+            /*builder.setPositiveButton("yes",new PositiveBtnClickListener());
             builder.setNegativeButton("No", new NegativeBtnCLickListener());
-            builder.setNeutralButton("NA",new NeutralBtnClickListener());
+            builder.setNeutralButton("NA",new NeutralBtnClickListener());*/
+
+            DialogInterface.OnClickListener listener = new AlertButtonsClickListener();
+            builder.setPositiveButton("Yes",listener);
+            builder.setNegativeButton("No",listener);
+            builder.setNeutralButton("NA",listener);
+
+            builder.setOnCancelListener(new DialogCancelClickListener());
+            builder.setOnDismissListener(new DialogDismissClickListener());
 
             AlertDialog logoutDialog = builder.create();
+            logoutDialog.setCancelable(true);
+
             logoutDialog.show();
+        }
+    }
+
+    class DialogCancelClickListener implements DialogInterface.OnCancelListener{
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            makeToast("Cancel clicked");
+        }
+    }
+
+    class DialogDismissClickListener implements DialogInterface.OnDismissListener{
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+            makeToast("Dismiss");
+        }
+    }
+
+    class AlertButtonsClickListener implements DialogInterface.OnClickListener{
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            if(which == Dialog.BUTTON_POSITIVE){
+                makeToast("Positive Button Clicked");
+            }
+            if(which == Dialog.BUTTON_NEGATIVE){
+                makeToast("Negative Button Clicked");
+            }
+            if(which == Dialog.BUTTON_NEUTRAL){
+                makeToast("Neutral Button is clicked");
+            }
         }
     }
 
